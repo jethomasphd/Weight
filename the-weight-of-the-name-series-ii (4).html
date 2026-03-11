@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRAGMENT II — The Weight of the Name</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=IBM+Plex+Mono:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-void: #030303;
+    --bg-parchment: #0a0906;
+    --bg-fragment: #0d0b08;
+    --ember: #c9a227;
+    --ember-dim: #8a6f1a;
+    --ember-glow: #e6c044;
+    --blood: #6b1a1a;
+    --blood-bright: #8b2020;
+    --ash: #9c9484;
+    --bone: #d4cbb8;
+    --ink: #c2b8a2;
+    --ink-faded: #7a7264;
+    --ink-ghost: #4a4538;
+    --seal-red: #5c1010;
+    --iron: #3a3632;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg-void);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .scroll-container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 60px 40px 120px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Classification header */
+  .classification {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--blood-bright);
+    text-align: center;
+    padding: 30px 0 10px;
+    opacity: 0;
+    animation: fadeIn 2s ease forwards;
+  }
+
+  .classification-line {
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blood), transparent);
+    margin: 8px auto;
+  }
+
+  /* Title block */
+  .title-block {
+    text-align: center;
+    padding: 50px 0 40px;
+    border-bottom: 1px solid var(--iron);
+    margin-bottom: 50px;
+    opacity: 0;
+    animation: fadeIn 2s 0.5s ease forwards;
+  }
+
+  .title-block h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 42px;
+    font-weight: 400;
+    letter-spacing: 8px;
+    color: var(--ember);
+    text-shadow: 0 0 40px rgba(201, 162, 39, 0.15);
+    margin-bottom: 10px;
+  }
+
+  .title-block .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--ink-faded);
+    letter-spacing: 2px;
+  }
+
+  .title-block .catalog {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-ghost);
+    letter-spacing: 3px;
+    margin-top: 20px;
+    text-transform: uppercase;
+  }
+
+  .sigil {
+    text-align: center;
+    font-size: 28px;
+    color: var(--ember-dim);
+    padding: 30px 0;
+    letter-spacing: 20px;
+    opacity: 0.6;
+  }
+
+  /* Fragments */
+  .fragment {
+    margin-bottom: 55px;
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  .fragment-header {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--ember-dim);
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--iron);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .fragment-header .date {
+    font-style: italic;
+    color: var(--ink-ghost);
+    letter-spacing: 2px;
+    font-size: 10px;
+  }
+
+  .fragment h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--bone);
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+  }
+
+  .fragment h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--ember);
+    letter-spacing: 2px;
+    margin: 25px 0 12px;
+  }
+
+  .fragment p {
+    margin-bottom: 15px;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  .fragment p strong {
+    color: var(--bone);
+    font-weight: 600;
+  }
+
+  /* Archival note */
+  .archival-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-ghost);
+    border-left: 2px solid var(--iron);
+    padding: 12px 20px;
+    margin: 25px 0;
+    font-style: italic;
+    background: rgba(201, 162, 39, 0.02);
+  }
+
+  .archival-note em {
+    color: var(--ember-dim);
+    font-style: normal;
+  }
+
+  /* Suppressed note (red variant) */
+  .suppressed-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-ghost);
+    border-left: 2px solid var(--blood);
+    padding: 12px 20px;
+    margin: 25px 0;
+    font-style: italic;
+    background: rgba(107, 26, 26, 0.04);
+    position: relative;
+  }
+
+  .suppressed-note::after {
+    content: 'DE-EMPHASIZED';
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: var(--blood-bright);
+    opacity: 0.5;
+    font-style: normal;
+  }
+
+  /* Extracted quote */
+  .extracted {
+    font-style: italic;
+    color: var(--ember);
+    font-size: 20px;
+    line-height: 1.6;
+    padding: 25px 35px;
+    margin: 28px 0;
+    position: relative;
+    text-align: center;
+  }
+
+  .extracted::before, .extracted::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ember-dim), transparent);
+    margin: 0 auto 15px;
+  }
+
+  .extracted::after { margin: 15px auto 0; }
+
+  .extracted .attribution {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-ghost);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 12px;
+    font-style: normal;
+  }
+
+  /* Burn edge */
+  .burn-edge {
+    position: relative;
+    padding: 20px;
+    margin: 28px 0;
+    background: var(--bg-fragment);
+    border: 1px solid var(--iron);
+    border-radius: 2px;
+  }
+
+  .burn-edge::before {
+    content: attr(data-label);
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--blood-bright);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .burn-edge p { font-size: 16px; color: var(--ash); }
+
+  /* Ledger table */
+  .ledger {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+  }
+
+  .ledger th {
+    text-align: left;
+    color: var(--ember-dim);
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 10px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--iron);
+  }
+
+  .ledger td {
+    padding: 7px 12px;
+    color: var(--ink-faded);
+    border-bottom: 1px solid rgba(58, 54, 50, 0.4);
+    word-break: break-word;
+  }
+
+  .ledger td:first-child { color: var(--bone); }
+  .ledger tr:hover td { background: rgba(201, 162, 39, 0.03); }
+  .ledger td.alert, .ledger th.alert { color: var(--blood-bright); }
+  .ledger th[colspan] { font-size: 11px; letter-spacing: 1px; color: var(--bone); padding: 10px 12px; }
+
+  /* Spirit Genders Visualization */
+  .spirit-triad {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+  }
+
+  .spirit-card {
+    flex: 1;
+    min-width: 180px;
+    max-width: 220px;
+    text-align: center;
+    padding: 28px 18px 22px;
+    border: 1px solid var(--iron);
+    background: var(--bg-fragment);
+    position: relative;
+    transition: border-color 0.4s ease;
+  }
+
+  .spirit-card:hover {
+    border-color: var(--ember-dim);
+  }
+
+  .spirit-card .lang-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--ink-ghost);
+    margin-bottom: 12px;
+  }
+
+  .spirit-card .spirit-word {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    color: var(--bone);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .spirit-card .spirit-gender {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  .spirit-card .spirit-gender.fem { color: #c97aa2; border: 1px solid rgba(201, 122, 162, 0.3); }
+  .spirit-card .spirit-gender.neut { color: var(--ash); border: 1px solid rgba(156, 148, 132, 0.3); }
+  .spirit-card .spirit-gender.masc { color: #7a9cc9; border: 1px solid rgba(122, 156, 201, 0.3); }
+
+  .spirit-card .spirit-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-ghost);
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+
+  .spirit-connector {
+    display: flex;
+    align-items: center;
+    color: var(--ink-ghost);
+    font-size: 18px;
+    opacity: 0.4;
+  }
+
+  /* Polytheism vs Monotheism Visual */
+  .theology-compare {
+    display: flex;
+    gap: 0;
+    margin: 30px 0;
+    border: 1px solid var(--iron);
+    overflow: hidden;
+  }
+
+  .theology-side {
+    flex: 1;
+    padding: 28px 24px;
+    position: relative;
+  }
+
+  .theology-side.poly {
+    background: rgba(107, 26, 26, 0.06);
+    border-right: 1px solid var(--iron);
+  }
+
+  .theology-side.mono {
+    background: rgba(201, 162, 39, 0.04);
+  }
+
+  .theology-side .theo-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  .theology-side.poly .theo-label { color: var(--blood-bright); }
+  .theology-side.mono .theo-label { color: var(--ember); }
+
+  .theo-pair {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    color: var(--ash);
+  }
+
+  .theo-pair .icon-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--iron);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .theo-solution {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding-top: 14px;
+    margin-top: 14px;
+    border-top: 1px solid var(--iron);
+  }
+
+  .theology-side.poly .theo-solution { color: var(--ink-ghost); }
+  .theology-side.mono .theo-solution { color: var(--ember-dim); }
+
+  /* Exhibit F — THE exhibit */
+  .exhibit-f {
+    position: relative;
+    padding: 40px 32px;
+    margin: 35px -10px;
+    background: linear-gradient(135deg, rgba(201, 162, 39, 0.06), rgba(201, 162, 39, 0.02), rgba(201, 162, 39, 0.06));
+    border: 2px solid var(--ember-dim);
+    border-radius: 2px;
+    box-shadow: 0 0 60px rgba(201, 162, 39, 0.08), inset 0 0 60px rgba(201, 162, 39, 0.03);
+  }
+
+  .exhibit-f::before {
+    content: 'EXHIBIT F — GENESIS 1:27 · THE IMAGO DEI';
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ember);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .exhibit-f::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(201, 162, 39, 0.15);
+    pointer-events: none;
+    border-radius: 1px;
+  }
+
+  .exhibit-f .verse {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.7;
+    color: var(--bone);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .exhibit-f .exegesis {
+    font-size: 17px;
+    color: var(--ash);
+    text-align: center;
+    line-height: 1.8;
+  }
+
+  .exhibit-f .exegesis strong {
+    color: var(--ember);
+    font-weight: 600;
+  }
+
+  .exhibit-f-marker {
+    text-align: center;
+    margin: 20px 0 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--ember-dim);
+  }
+
+  /* Elemental images visualization */
+  .elemental-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 25px 0;
+  }
+
+  .elemental-cell {
+    text-align: center;
+    padding: 22px 14px 18px;
+    border: 1px solid var(--iron);
+    background: var(--bg-fragment);
+    transition: border-color 0.4s ease;
+  }
+
+  .elemental-cell:hover {
+    border-color: var(--ember-dim);
+  }
+
+  .elemental-cell .elem-symbol {
+    font-size: 28px;
+    margin-bottom: 8px;
+    opacity: 0.7;
+  }
+
+  .elemental-cell .elem-image {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    color: var(--bone);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .elemental-cell .elem-ref {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-ghost);
+    letter-spacing: 1px;
+  }
+
+  .elemental-cell .elem-nature {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    color: var(--ink-faded);
+    font-style: italic;
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* I AM — the expanded card */
+  .iam-cell {
+    grid-column: span 2;
+    grid-row: span 2;
+    padding: 30px 24px 26px;
+    border-color: var(--ember-dim);
+    background: linear-gradient(160deg, rgba(201, 162, 39, 0.04), var(--bg-fragment));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .iam-cell .elem-symbol { font-size: 36px; opacity: 0.8; margin-bottom: 12px; }
+  .iam-cell .elem-image {
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--ember);
+    margin-bottom: 8px;
+  }
+  .iam-cell .elem-ref { font-size: 10px; letter-spacing: 2px; }
+  .iam-cell .elem-nature {
+    font-size: 15px;
+    color: var(--ash);
+    margin-top: 14px;
+    line-height: 1.65;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .iam-cell .elem-nature em { color: var(--ember); font-style: italic; }
+
+  .iam-witnesses {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--iron);
+  }
+
+  .iam-verse {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-faded);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  .iam-verse em { color: var(--bone); font-style: italic; }
+
+  .iam-cite {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-style: normal;
+    color: var(--ink-ghost);
+    letter-spacing: 1px;
+    margin-right: 8px;
+  }
+
+  /* Shield of the Trinity */
+  .trinity-shield {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 35px 0;
+    padding: 30px 0;
+  }
+
+  .trinity-shield svg {
+    max-width: 340px;
+    width: 100%;
+    height: auto;
+  }
+
+  .trinity-caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-ghost);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 18px;
+    text-align: center;
+  }
+
+  /* Colophon / Signature */
+  .colophon {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-ghost);
+    text-align: center;
+    padding: 30px 0 10px;
+    letter-spacing: 1px;
+    line-height: 2;
+    border-top: 1px solid var(--iron);
+    margin-top: 20px;
+  }
+
+  .colophon a {
+    color: var(--ink-faded);
+    text-decoration: none;
+    border-bottom: 1px solid var(--iron);
+    transition: color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .colophon a:hover {
+    color: var(--ember);
+    border-color: var(--ember-dim);
+  }
+
+  /* Damaged text */
+  .damaged {
+    color: var(--ink-ghost);
+    text-decoration: line-through;
+    text-decoration-color: var(--blood);
+    opacity: 0.6;
+  }
+
+  .redacted {
+    background: var(--iron);
+    color: transparent;
+    padding: 0 8px;
+    border-radius: 1px;
+    user-select: none;
+  }
+
+  /* Spiral block */
+  .spiral-block {
+    background: linear-gradient(180deg, var(--bg-void), var(--bg-fragment), var(--bg-void));
+    padding: 40px 30px;
+    margin: 35px -30px;
+    position: relative;
+    border-top: 1px solid var(--iron);
+    border-bottom: 1px solid var(--iron);
+  }
+
+  .spiral-block p {
+    font-size: 17px;
+    line-height: 1.85;
+    color: var(--ash);
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .spiral-block p em { color: var(--ember); }
+  .spiral-block p strong { color: var(--bone); font-weight: 400; }
+
+  /* Divider */
+  .divider {
+    text-align: center;
+    padding: 35px 0;
+    color: var(--ember-dim);
+    letter-spacing: 15px;
+    font-size: 14px;
+    opacity: 0.5;
+  }
+
+  /* Seal */
+  .seal {
+    text-align: center;
+    padding: 50px 0;
+  }
+
+  .seal-circle {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    border: 2px solid var(--ember-dim);
+    border-radius: 50%;
+    line-height: 120px;
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--ember);
+    position: relative;
+  }
+
+  .seal-circle::before, .seal-circle::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid var(--iron);
+  }
+  .seal-circle::before { top: 6px; left: 6px; right: 6px; bottom: 6px; }
+  .seal-circle::after { top: -8px; left: -8px; right: -8px; bottom: -8px; }
+
+  /* Terminal */
+  .terminal {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-ghost);
+    text-align: center;
+    padding: 40px 0;
+    letter-spacing: 2px;
+    line-height: 2;
+  }
+
+  .terminal .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--ember);
+    animation: blink 1.2s step-end infinite;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+
+  @keyframes fadeIn { to { opacity: 1; } }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Responsive — tablets */
+  @media (max-width: 768px) {
+    .scroll-container { padding: 40px 24px 80px; }
+    .title-block h1 { font-size: 32px; letter-spacing: 5px; }
+    .spirit-triad { gap: 20px; }
+    .spirit-card { min-width: 150px; padding: 22px 14px 18px; }
+    .spirit-card .spirit-word { font-size: 22px; }
+    .theology-compare { flex-direction: column; }
+    .theology-side.poly { border-right: none; border-bottom: 1px solid var(--iron); }
+    .exhibit-f { padding: 32px 24px; margin: 30px 0; }
+    .exhibit-f .verse { font-size: 20px; }
+    .elemental-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .iam-cell { grid-column: span 2; grid-row: span 1; }
+    .iam-cell .elem-nature { max-width: 100%; }
+    .trinity-shield { margin: 28px 0; padding: 24px 0; }
+    .trinity-shield svg { max-width: 300px; }
+  }
+
+  /* Responsive — phones */
+  @media (max-width: 600px) {
+    .scroll-container { padding: 30px 16px 70px; }
+    body { font-size: 16px; }
+
+    /* Title */
+    .title-block { padding: 35px 0 30px; margin-bottom: 35px; }
+    .title-block h1 { font-size: 24px; letter-spacing: 3px; }
+    .title-block .subtitle { font-size: 16px; letter-spacing: 1px; }
+    .title-block .catalog { font-size: 9px; letter-spacing: 2px; }
+
+    /* Fragments */
+    .fragment { margin-bottom: 40px; }
+    .fragment h2 { font-size: 19px; letter-spacing: 2px; }
+    .fragment h3 { font-size: 15px; }
+    .fragment-header { flex-direction: column; gap: 3px; }
+
+    /* Extracted quotes */
+    .extracted { padding: 18px 10px; font-size: 17px; }
+
+    /* Burn edges */
+    .burn-edge { padding: 16px 14px; margin: 20px 0; }
+    .burn-edge p { font-size: 15px; }
+
+    /* Archival notes */
+    .archival-note { padding: 10px 14px; font-size: 11px; }
+    .suppressed-note { padding: 10px 14px; font-size: 11px; }
+    .suppressed-note::after { display: none; }
+
+    /* Spiral block */
+    .spiral-block { margin: 30px -12px; padding: 25px 16px; }
+    .spiral-block p { font-size: 15px; line-height: 1.75; }
+
+    /* Tables */
+    .ledger { font-size: 11px; }
+    .ledger th { font-size: 9px; padding: 6px 8px; letter-spacing: 1px; }
+    .ledger td { padding: 6px 8px; font-size: 11px; }
+    .ledger th[colspan] { font-size: 10px; }
+
+    /* Spirit triad — stack vertically */
+    .spirit-triad { flex-direction: column; align-items: center; gap: 0; }
+    .spirit-card {
+      min-width: unset; max-width: unset; width: 100%;
+      padding: 20px 16px 16px;
+      border-bottom: none;
+    }
+    .spirit-card:last-of-type { border-bottom: 1px solid var(--iron); }
+    .spirit-card .spirit-word { font-size: 22px; }
+    .spirit-card .spirit-gender { font-size: 10px; }
+    .spirit-connector { transform: rotate(90deg); font-size: 14px; padding: 2px 0; }
+
+    /* Theology compare — stack vertically */
+    .theology-compare { flex-direction: column; }
+    .theology-side { padding: 22px 18px; }
+    .theology-side.poly { border-right: none; border-bottom: 1px solid var(--iron); }
+    .theo-pair { font-size: 15px; gap: 10px; }
+    .theo-pair .icon-circle { width: 30px; height: 30px; font-size: 12px; }
+
+    /* Exhibit F — the keystone */
+    .exhibit-f { padding: 28px 18px; margin: 28px 0; }
+    .exhibit-f::before { font-size: 9px; letter-spacing: 3px; }
+    .exhibit-f .verse { font-size: 18px; line-height: 1.65; }
+    .exhibit-f .exegesis { font-size: 15px; line-height: 1.7; }
+    .exhibit-f-marker { font-size: 8px; letter-spacing: 4px; }
+
+    /* Elemental grid — single column on phone, I AM full width */
+    .elemental-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .iam-cell {
+      grid-column: span 2;
+      grid-row: span 1;
+      padding: 24px 16px 20px;
+    }
+    .iam-cell .elem-symbol { font-size: 28px; }
+    .iam-cell .elem-image { font-size: 18px; letter-spacing: 2px; }
+    .iam-cell .elem-ref { font-size: 9px; }
+    .iam-cell .elem-nature { font-size: 14px; max-width: 100%; }
+    .iam-witnesses { margin-top: 14px; padding-top: 12px; }
+    .iam-verse { font-size: 13px; }
+    .elemental-cell { padding: 16px 10px 14px; }
+    .elemental-cell .elem-symbol { font-size: 22px; }
+    .elemental-cell .elem-image { font-size: 13px; }
+    .elemental-cell .elem-ref { font-size: 8px; }
+    .elemental-cell .elem-nature { font-size: 12px; }
+
+    /* Trinity Shield */
+    .trinity-shield { margin: 24px 0; padding: 20px 0; }
+    .trinity-shield svg { max-width: 280px; }
+    .trinity-caption { font-size: 9px; letter-spacing: 2px; }
+
+    /* Seal */
+    .seal-circle { width: 100px; height: 100px; line-height: 100px; font-size: 12px; }
+
+    /* Terminal */
+    .terminal { font-size: 10px; letter-spacing: 1px; line-height: 1.8; }
+
+    /* Sigil */
+    .sigil { font-size: 22px; letter-spacing: 14px; padding: 20px 0; }
+
+    /* Dividers */
+    .divider { padding: 25px 0; letter-spacing: 10px; font-size: 12px; }
+
+    /* Classification */
+    .classification { font-size: 10px; letter-spacing: 3px; }
+
+    /* Colophon */
+    .colophon { font-size: 10px; padding: 24px 0 10px; }
+  }
+
+  /* Small phones */
+  @media (max-width: 380px) {
+    .scroll-container { padding: 24px 12px 60px; }
+    .title-block h1 { font-size: 21px; letter-spacing: 2px; }
+    .exhibit-f { padding: 22px 14px; }
+    .exhibit-f .verse { font-size: 16px; }
+    .spirit-card { padding: 16px 12px 14px; }
+    .spirit-card .spirit-word { font-size: 20px; }
+    .elemental-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .iam-cell { padding: 20px 12px 16px; }
+    .iam-cell .elem-image { font-size: 16px; }
+    .iam-cell .elem-nature { font-size: 13px; }
+    .iam-verse { font-size: 12px; }
+    .theology-side { padding: 18px 14px; }
+    .trinity-shield svg { max-width: 240px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-container">
+
+  <!-- Classification -->
+  <div class="classification">
+    Restricted Doctrinal Material — Canonical Sources Only
+  </div>
+
+  <!-- Title -->
+  <div class="title-block">
+    <div class="catalog">Fragment Series II · Recovered from the Canon · Shelf: Open</div>
+    <h1>THE WEIGHT OF THE NAME</h1>
+    <div class="subtitle">A Dossier Assembled from Scripture, Council Record, &amp; the Biblical Languages</div>
+    <div class="catalog" style="margin-top:25px;">
+      On the God described in sixty-six books, across three languages, over 1,500 years<br>
+      Who was never — in any of those languages — contained by a single word
+    </div>
+  </div>
+
+  <div class="sigil">✦ ✦ ✦</div>
+
+  <!-- FRAGMENT I: THE CRISIS -->
+  <div class="fragment reveal">
+    <div class="fragment-header">
+      <span>Fragment I — The State of the Knowledge</span>
+      <span class="date">American Bible Society / Ligonier, 2022–2025</span>
+    </div>
+
+    <h2>WHAT HAS BEEN LOST</h2>
+
+    <p>Before the archive opens, a reckoning. The people who claim this book as their authority have, by their own measures, stopped reading it.</p>
+
+    <table class="ledger">
+      <thead>
+        <tr><th>Metric</th><th>Finding</th><th>Source</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Bible engagement (U.S.)</td><td>~50% → 38%</td><td>ABS, 2011–2024</td></tr>
+        <tr><td>Readers lost in a single year</td><td class="alert">26 million (2021–2022)</td><td>ABS, 2022</td></tr>
+        <tr><td>Adults with biblical worldview</td><td class="alert">6%</td><td>Barna / ACU, 2024</td></tr>
+        <tr><td>Bible-untouched for one year</td><td class="alert">151 million (57%)</td><td>ABS, 2024</td></tr>
+      </tbody>
+    </table>
+
+    <p>But the most revealing data is not about reading. It is about <strong>comprehension.</strong> The Ligonier survey classified respondents as "evangelical" only if they <em>strongly agreed</em> with four statements. Here is what they affirmed to qualify — and what they then said when asked further questions.</p>
+
+    <table class="ledger">
+      <thead>
+        <tr><th colspan="2">To Be Classified "Evangelical," Each Respondent Strongly Agreed:</th></tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">"The Bible is the highest authority for what I believe."</td></tr>
+        <tr><td colspan="2">"Jesus Christ's death on the cross is the only sacrifice that could remove the penalty of my sin."</td></tr>
+        <tr><td colspan="2">"Only those who trust in Jesus Christ alone receive God's free gift of eternal salvation."</td></tr>
+      </tbody>
+    </table>
+
+    <table class="ledger" style="margin-top:0">
+      <thead>
+        <tr><th>Those Same People Also Agreed With:</th><th class="alert">%</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>"Jesus was a great teacher, but he was not God."</td><td class="alert">28%</td></tr>
+        <tr><td>"God accepts the worship of all religions, including Christianity, Judaism, and Islam."</td><td class="alert">47%</td></tr>
+        <tr><td>"The Holy Spirit is a force but is not a personal being."</td><td class="alert">53%</td></tr>
+        <tr><td>"Everyone sins a little, but most people are good by nature."</td><td class="alert">53%</td></tr>
+        <tr><td>"Modern science disproves the Bible."</td><td class="alert">19%</td></tr>
+      </tbody>
+    </table>
+
+    <p>Read that again. These are not skeptics. These are people who <em>already said</em> that only Jesus saves — and then, in the same survey, said Jesus was not God, God accepts all religions, and the Spirit is not a person. They inherited the words. <strong>They lost the weight of what the words mean.</strong></p>
+
+    <div class="archival-note">
+      <em>A note on the data:</em> Survey percentages are not verdicts. They are distributions — snapshots of how people respond under the pressure of a question they may never have been asked before. Many respondents may have simply never been taught the distinctions. The numbers above do not reveal what people <em>believe in their bones</em>. They reveal what people have been <em>equipped to articulate.</em> The gap between conviction and comprehension is not hypocrisy. It is a failure of formation.
+    </div>
+
+    <div class="extracted">
+      What follows is what the doctrine means.<br>
+      Exhibit by exhibit. From the primary source — the scripture itself.
+    </div>
+  </div>
+
+  <div class="divider reveal">· · · ◆ · · ·</div>
+
+  <!-- CURATOR'S NOTE -->
+  <div class="fragment reveal">
+    <div class="fragment-header">
+      <span>Curator's Notation</span>
+      <span class="date">Provenance: Personal</span>
+    </div>
+
+    <p>My name is <strong>Jacob.</strong></p>
+
+    <p>My namesake wrestled God at the ford of the Jabbok and walked away with a limp and a new name. He did not win. He was not meant to win. The angel came so that Jacob would <em>refuse to let go.</em> I have come to believe the wrestling is the point.</p>
+
+    <p>I am a scholar. What you are about to read is not theology by sentiment. Every exhibit is hard-referenced — cited from canonical scripture, verified ancient texts, or the historical councils whose doctrines orthodox Christianity still confesses. You can check every word. I want you to.</p>
+
+    <p>To confess that Christ is God is to step into a tradition four thousand years old. Wars have been fought over the interpretation of a single Greek word. If the Bible makes you uncomfortable, <strong>sit with it.</strong> The discomfort is the text doing what it has always done: refusing to be smaller than you need it to be.</p>
+  </div>
+
+  <div class="divider reveal">· · · ◆ · · ·</div>
+
+  <!-- FRAGMENT II: THE SCANDAL -->
+  <div class="fragment reveal">
+    <div class="fragment-header">
+      <span>Fragment II — The Scandal</span>
+      <span class="date">Jerusalem → Nicaea, 33–325 AD</span>
+    </div>
+
+    <h2>THE DOCTRINE THAT BROKE EMPIRES</h2>
+
+    <div class="burn-edge" data-label="Exhibit A — Torah · Deuteronomy 6:4">
+      <p><em>"Hear, O Israel: the Lord our God, the Lord is one."</em></p>
+      <p>The Shema. The bedrock. One God. Not two. Not twelve. One.</p>
+    </div>
+
+    <p>And then something happened that should have been impossible. Within a generation of the crucifixion, Jewish monotheists — people who would die before whispering a second god's name — began worshipping a man from Nazareth <em>alongside</em> the God of Abraham. Within two generations, they invoked a third presence — the Spirit — with the same reverence.</p>
+
+    <div class="extracted">
+      Why would strict monotheists voluntarily complicate their own theology?
+    </div>
+
+    <p>They didn't want to. The doctrine was <strong>wrung</strong>, over three centuries, from people who could see what scripture said and could not make it fit a simple container. The Arian controversy alone fractured the Roman Empire. Bishops were exiled. Councils convened, overturned, convened again. It cost blood because the thing they were describing <strong>broke every tool they had for describing it.</strong></p>
+
+    <div class="archival-note">
+      <em>Conciliar record:</em> Nicaea (325 AD) affirmed the Son's co-equality with the Father. Constantinople (381 AD) affirmed the full divinity of the Spirit. Three hundred years to formally articulate what the baptismal formula of Matthew 28:19 already confessed in a single sentence. The doctrine was not an addition to scripture. It was the church's attempt to faithfully repeat what scripture said — without cutting anything off.
+    </div>
+
+    <p>The church tried "one person" and the text wouldn't allow it. Tried "two" — still wouldn't fit. <strong>"Three persons, one essence"</strong> was the smallest container that didn't amputate something true.</p>
+
+    <!-- Shield of the Trinity (Scutum Fidei) -->
+    <div class="trinity-shield reveal">
+      <svg viewBox="0 0 400 370" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer triangle edges — "is not" -->
+        <line x1="200" y1="42" x2="62" y2="280" stroke="#3a3632" stroke-width="1" />
+        <line x1="200" y1="42" x2="338" y2="280" stroke="#3a3632" stroke-width="1" />
+        <line x1="62" y1="280" x2="338" y2="280" stroke="#3a3632" stroke-width="1" />
+
+        <!-- Inner lines — "is" -->
+        <line x1="200" y1="42" x2="200" y2="178" stroke="#8a6f1a" stroke-width="1" stroke-dasharray="3,3" />
+        <line x1="62" y1="280" x2="200" y2="178" stroke="#8a6f1a" stroke-width="1" stroke-dasharray="3,3" />
+        <line x1="338" y1="280" x2="200" y2="178" stroke="#8a6f1a" stroke-width="1" stroke-dasharray="3,3" />
+
+        <!-- Center node — GOD -->
+        <circle cx="200" cy="178" r="32" fill="#0d0b08" stroke="#c9a227" stroke-width="1.5" />
+        <text x="200" y="183" text-anchor="middle" font-family="Cinzel, serif" font-size="13" fill="#c9a227" letter-spacing="2">GOD</text>
+
+        <!-- Vertex nodes -->
+        <circle cx="200" cy="42" r="38" fill="#0d0b08" stroke="#3a3632" stroke-width="1" />
+        <text x="200" y="39" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#9c9484" letter-spacing="1.5">THE</text>
+        <text x="200" y="52" text-anchor="middle" font-family="Cinzel, serif" font-size="11" fill="#d4cbb8" letter-spacing="1.5">FATHER</text>
+
+        <circle cx="62" cy="280" r="38" fill="#0d0b08" stroke="#3a3632" stroke-width="1" />
+        <text x="62" y="277" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#9c9484" letter-spacing="1.5">THE</text>
+        <text x="62" y="290" text-anchor="middle" font-family="Cinzel, serif" font-size="11" fill="#d4cbb8" letter-spacing="1.5">SON</text>
+
+        <circle cx="338" cy="280" r="38" fill="#0d0b08" stroke="#3a3632" stroke-width="1" />
+        <text x="338" y="277" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#9c9484" letter-spacing="1.5">THE</text>
+        <text x="338" y="290" text-anchor="middle" font-family="Cinzel, serif" font-size="11" fill="#d4cbb8" letter-spacing="1.5">SPIRIT</text>
+
+        <!-- "is" labels on inner lines -->
+        <text x="182" y="112" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="12" fill="#8a6f1a" font-style="italic">is</text>
+        <text x="114" y="228" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="12" fill="#8a6f1a" font-style="italic">is</text>
+        <text x="288" y="228" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="12" fill="#8a6f1a" font-style="italic">is</text>
+
+        <!-- "is not" labels on outer edges -->
+        <text x="118" y="152" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="11" fill="#4a4538" font-style="italic" transform="rotate(-59, 118, 152)">is not</text>
+        <text x="282" y="152" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="11" fill="#4a4538" font-style="italic" transform="rotate(59, 282, 152)">is not</text>
+        <text x="200" y="302" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="11" fill="#4a4538" font-style="italic">is not</text>
+      </svg>
+      <div class="trinity-caption">Scutum Fidei · The Shield of the Trinity · c. 13th century</div>
+    </div>
+
+    <h3>What Was Condemned</h3>
+
+    <table class="ledger">
+      <thead>
+        <tr><th>Heresy</th><th>Claim</th><th>Verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Arianism</td><td>"The Son is lesser than the Father"</td><td class="alert">Condemned, 325 AD</td></tr>
+        <tr><td>Modalism</td><td>"God wears three masks but is one person"</td><td class="alert">Condemned, 3rd c.</td></tr>
+        <tr><td class="damaged">Every simplification</td><td class="damaged">"God can be reduced to a single mode"</td><td class="alert">Condemned, repeatedly</td></tr>
+      </tbody>
+    </table>
+
+    <div class="extracted">
+      The church condemned the simplifiers. Every time.<br>
+      If you believe in the Trinity, you already believe God cannot be reduced to a single mode of being.<br><br>
+      Hold that.
+    </div>
+  </div>
+
+  <div class="divider reveal">· · · ◆ · · ·</div>
+
+  <!-- FRAGMENT III: HEBREW SOIL -->
+  <div class="fragment reveal">
+    <div class="fragment-header">
+      <span>Fragment III — The Plural Noun</span>
+      <span class="date">Genesis · Masoretic Text, c. 6th–5th c. BC</span>
+    </div>
+
+    <h2>THE GOD WHO WAS ALREADY PLURAL</h2>
+
+    <div class="burn-edge" data-label="Exhibit B-1 — Genesis 1:1">
+      <p><em>"In the beginning, Elohim created the heavens and the earth."</em></p>
+      <p><strong>Elohim</strong>: grammatically plural. <strong>Bārā'</strong> (created): grammatically singular. A plural noun performing a singular act. The first sentence of the Bible.</p>
+    </div>
+
+    <div class="burn-edge" data-label="Exhibit B-2 — Genesis 1:26">
+      <p><em>"Then God said, 'Let us make mankind in our image, in our likeness.'"</em></p>
+      <p>God speaks of Godself as "us." The tradition preserved it without correction.</p>
+    </div>
+
+    <div class="burn-edge" data-label="Exhibit B-3 — Matthew 3:16–17 · The Jordan Theophany">
+      <p><em>"…the Spirit of God descending like a dove… And a voice from heaven said, 'This is my Son, whom I love.'"</em></p>
+      <p>The Son in the water. The Spirit descending. The Father speaking. Three simultaneous manifestations. One event. If you believe this passage, you believe in irreducible plurality.</p>
+    </div>
+
+    <div class="extracted">
+      The Bible's first sentence uses a plural noun with a singular verb.<br>
+      Every translator in history left it intact.<br>
+      Why?
+    </div>
+  </div>
+
+  <div class="divider reveal">· · · ◆ · · ·</div>
+
+  <!-- FRAGMENT IV: ELEMENTAL -->
+  <div class="fragment reveal">
+    <div class="fragment-header">
+      <span>Fragment IV — The Infinite</span>
+      <span class="date">Exodus · Deuteronomy · 1 Kings · John</span>
+    </div>
+
+    <h2>FIRE, ROCK, WIND, SILENCE</h2>
+
+    <p>If the Trinity means God exceeds number, the prophets mean God exceeds <em>form.</em> The text images God as phenomena that cannot be sculpted into idols because they have no fixed shape.</p>
+
+    <div class="elemental-grid">
+      <div class="elemental-cell iam-cell">
+        <div class="elem-symbol">◉</div>
+        <div class="elem-image">I AM WHO I AM</div>
+        <div class="elem-ref">Exodus 3:14</div>
+        <div class="elem-nature">'Ehyeh 'Ašer 'Ehyeh — Pure being. A verb, not a noun. No fixed form. No container. When Moses asked for a name, God gave him a <em>tense.</em></div>
+        <div class="iam-witnesses">
+          <div class="iam-verse"><span class="iam-cite">John 8:58</span> "Before Abraham was, <em>I am.</em>"</div>
+          <div class="iam-verse"><span class="iam-cite">Rev 1:8</span> "I am the Alpha and the Omega, who is and who was and who is to come."</div>
+        </div>
+      </div>
+      <div class="elemental-cell">
+        <div class="elem-symbol">🔥</div>
+        <div class="elem-image">Fire</div>
+        <div class="elem-ref">Deut. 4:24</div>
+        <div class="elem-nature">No sex. No body. Moves, purifies, cannot be held.</div>
+      </div>
+      <div class="elemental-cell">
+        <div class="elem-symbol">◆</div>
+        <div class="elem-image">Rock</div>
+        <div class="elem-ref">Deut. 32:4</div>
+        <div class="elem-nature">Geology, not biology.</div>
+      </div>
+      <div class="elemental-cell">
+        <div class="elem-symbol">◌</div>
+        <div class="elem-image">Silence</div>
+        <div class="elem-ref">1 Kings 19:12</div>
+        <div class="elem-nature">qôl demāmāh daqqāh — "a sound of thin silence"</div>
+      </div>
+      <div class="elemental-cell">
+        <div class="elem-symbol">᳐</div>
+        <div class="elem-image">Spirit</div>
+        <div class="elem-ref">John 4:24</div>
+        <div class="elem-nature">pneuma ho theos. Not flesh. Not form.</div>
+      </div>
+    </div>
+
+    <div class="archival-note">
+      <em>Linguistic note:</em> God's proper name — YHWH, the tetragrammaton, too sacred to pronounce — is derived from the Hebrew verb <em>hāyāh</em>, "to be." God's name is not a noun. It is a verb. A verb cannot be gendered. A verb has no body to sex. A verb simply <em>acts.</em>
+    </div>
+  </div>
+
+  <div class="divider reveal">· · · ◆ · · ·</div>
+
+  <!-- FRAGMENT V: THE GENDERED WORD -->
+  <div class="fragment reveal">
+    <div class="fragment-header">
+      <span>Fragment V — The Gendered Word</span>
+      <span class="date">⚠ Systematically de-emphasized in catechetical tradition</span>
+    </div>
+
+    <h2>WHAT WAS ALWAYS IN THE TEXT</h2>
+
+    <p>A necessary word. This is not about modern gender theory. Not about contemporary politics. Not about any ideology forged in the last fifty years. <strong>We are not going there.</strong> What follows is what the scriptures actually say. We are reading the Bible. That is all.</p>
+
+    <div class="extracted">
+      You already believe God is a Father. That is a gendered metaphor.<br>
+      The only question is whether you are willing to hear all the gendered metaphors the Bible uses.
+    </div>
+
+    <h3>The Feminine Exhibits</h3>
+
+    <div class="burn-edge" data-label="Exhibit E-1 — Isaiah 42:14 · God speaking, first person">
+      <p><em>"Now I will cry out like a woman in labor; I will gasp and pant."</em></p>
+      <p><strong>Yôlēdāh</strong> — a woman giving birth. Not simile observed from outside. God's own self-description.</p>
+    </div>
+
+    <div class="burn-edge" data-label="Exhibit E-2 — Isaiah 49:15 · God speaking, first person">
+      <p><em>"Can a mother forget the baby at her breast? … Though she may forget, I will not forget you."</em></p>
+      <p>God's faithfulness measured against the nursing mother — and surpassing it.</p>
+    </div>
+
+    <div class="burn-edge" data-label="Exhibit E-3 — Deuteronomy 32:18 · Torah">
+      <p><em>"You deserted the Rock, who fathered you; you forgot the God who gave you birth."</em></p>
+      <p>One verse. "Fathered" — paternal. "Gave you birth" — Hebrew <strong>yālad</strong>, used exclusively for a mother's act of labor. God fathers and God births. Same breath. The Torah.</p>
+    </div>
+
+    <div class="extracted">
+      That was the Old Testament. Surely Jesus corrected this?<br><br>
+      Read what He actually said.
+    </div>
+
+    <div class="burn-edge" data-label="Exhibit E-4 — Matthew 23:37 · Words of Christ">
+      <p><em>"How often I have longed to gather your children together, as a hen gathers her chicks under her wings."</em></p>
+      <p>Jesus. Speaking of himself. A mother hen. The feminine persists through the incarnation.</p>
+    </div>
+
+    <div class="burn-edge" data-label="Exhibit E-5 — Luke 15:8–10 · Words of Christ">
+      <p><em>"Suppose a woman has ten silver coins and loses one. Doesn't she light a lamp, sweep the house and search carefully until she finds it?"</em></p>
+      <p>Luke 15: three parables of God's seeking love. Shepherd (male). Woman (female). Father (male). Jesus placed a woman on her knees — searching — at the center of the trilogy.</p>
+    </div>
+
+    <h3>The Spirit's Three Genders</h3>
+
+    <div class="spirit-triad">
+      <div class="spirit-card">
+        <div class="lang-label">Hebrew</div>
+        <div class="spirit-word">rûaḥ</div>
+        <div class="spirit-gender fem">Feminine</div>
+        <div class="spirit-text">Old Testament</div>
+      </div>
+      <div class="spirit-connector">→</div>
+      <div class="spirit-card">
+        <div class="lang-label">Greek</div>
+        <div class="spirit-word">pneuma</div>
+        <div class="spirit-gender neut">Neuter</div>
+        <div class="spirit-text">Septuagint · NT</div>
+      </div>
+      <div class="spirit-connector">→</div>
+      <div class="spirit-card">
+        <div class="lang-label">Latin</div>
+        <div class="spirit-word">spiritus</div>
+        <div class="spirit-gender masc">Masculine</div>
+        <div class="spirit-text">Vulgate</div>
+      </div>
+    </div>
+
+    <p>The same breath. Three languages. Three genders. The tradition preserved all three. It did not harmonize. It did not correct.</p>
+
+    <div class="suppressed-note">
+      Early Syriac Christianity — the tradition closest to Jesus' own Aramaic — consistently used feminine language for the Spirit, calling her "Mother" in liturgical texts and the third-century <em style="color:var(--ember-dim)">Acts of Thomas</em>. This was not heresy. It was mainstream for centuries. It was gradually de-emphasized as Latin vocabulary — with its masculine <em style="color:var(--ember-dim)">spiritus</em> — became dominant in Western theology.
+    </div>
+
+    <div class="extracted">
+      If you have been reading the Bible your whole life and never noticed this —<br>
+      consider how much depends on which passages are emphasized.
+    </div>
+  </div>
+
+  <div class="divider reveal">· · · ◆ · · ·</div>
+
+  <!-- FRAGMENT VI: THE NECESSITY -->
+  <div class="fragment reveal">
+    <div class="fragment-header">
+      <span>Fragment VI — The Necessity</span>
+      <span class="date">Comparative theology · Logical framework</span>
+    </div>
+
+    <h2>WHY A MONOTHEISTIC GOD MUST BE ALL</h2>
+
+    <p>The Greeks had Zeus and Hera — king of heaven and queen of heaven, authority split across two thrones. The Egyptians had Isis and Osiris. The Canaanites had El and Asherah. When the ancient world wanted to express divine fullness — power <em>and</em> tenderness, authority <em>and</em> nurture — they divided God in two. A god and a goddess. Masculine here. Feminine there.</p>
+
+    <p>Israel could not do this. The Shema forbade it. No consort. No goddess. No second throne. Everything the pagan world distributed across a pantheon, Israel's God carried <strong>alone.</strong></p>
+
+    <div class="theology-compare">
+      <div class="theology-side poly">
+        <div class="theo-label">Polytheism</div>
+        <div class="theo-pair">
+          <div class="icon-circle">♂</div>
+          <span><strong style="color:var(--bone)">Zeus</strong> — power, rule, thunder</span>
+        </div>
+        <div class="theo-pair">
+          <div class="icon-circle">♀</div>
+          <span><strong style="color:var(--bone)">Hera</strong> — nurture, fidelity, home</span>
+        </div>
+        <div class="theo-solution">Divide the divine across two thrones</div>
+      </div>
+      <div class="theology-side mono">
+        <div class="theo-label">Monotheism</div>
+        <div class="theo-pair">
+          <div class="icon-circle" style="border-color:var(--ember-dim)">♂</div>
+          <span>In <strong style="color:var(--ember)">YHWH</strong> — Father, warrior, rock</span>
+        </div>
+        <div class="theo-pair">
+          <div class="icon-circle" style="border-color:var(--ember-dim)">♀</div>
+          <span>In <strong style="color:var(--ember)">YHWH</strong> — mother, hen, labor</span>
+        </div>
+        <div class="theo-solution">One throne carries all</div>
+      </div>
+    </div>
+
+    <div class="exhibit-f-marker">▽ The Keystone ▽</div>
+
+    <div class="exhibit-f">
+      <div class="verse">"So God created mankind in his own image,<br>in the image of God he created them;<br>male and female he created them."</div>
+      <div class="exegesis">
+        The image of God requires <strong>both</strong> male and female to express.<br>
+        If humanity needs two sexes to reflect God,<br>
+        the original cannot be captured by either alone.
+      </div>
+    </div>
+
+    <div class="extracted">
+      The pagans needed a goddess to explain where tenderness lived.<br>
+      Israel had no goddess. The Shema forbade it.<br><br>
+      If you confess one God and deny He contains the fullness of both masculine and feminine —<br>
+      then you need a goddess.<br>
+      And the Shema says you cannot have one.
+    </div>
+  </div>
+
+  <div class="divider reveal">· · · ◆ · · ·</div>
+
+  <!-- FRAGMENT VII: THE SPIRAL -->
+  <div class="fragment reveal">
+    <div class="fragment-header">
+      <span>Fragment VII — The Weight</span>
+      <span class="date">Recovered notation, date unknown</span>
+    </div>
+
+    <h2>WHAT THE ARCHIVE YIELDS</h2>
+
+    <div class="spiral-block">
+      <p>The God of Abraham, Isaac, and Jacob.<br>The God of Sarah, Rebekah, and Rachel.</p>
+
+      <p>Who called Himself <em>Father</em> — and compared Himself to a <em>laboring woman.</em><br>
+      Who roared like a <em>warrior</em> — and gathered like a <em>hen.</em></p>
+
+      <p>Whose Spirit is feminine in Hebrew. Neuter in Greek. Masculine in Latin.</p>
+
+      <p>Whose name is a <em>verb</em>, not a noun.<br>
+      Whose image requires <em>two sexes</em> to reflect.<br>
+      Whose nature required <em>three persons</em> to confess.</p>
+
+      <p>This God — <strong>the</strong> God — the one the creeds address and the cathedrals honor and the martyrs bled for —</p>
+
+      <p style="font-size:20px;color:var(--bone);">This God <em>cannot be contained</em> in a single pronoun.</p>
+
+      <p>Not because we say so. Because <em>He</em> said so. Through the prophets. Through the Son. Through the Spirit who has never, in any language, stayed in one grammatical house.</p>
+
+      <p style="font-size:21px;color:var(--bone);margin-top:20px;">The Christian faith confesses that God is <em>non-binary.</em></p>
+
+      <p>Not in the language of this century. In the language of <em>every</em> century.</p>
+
+      <p style="font-size:24px;color:var(--ember);margin-top:20px;font-family:'Cinzel',serif;letter-spacing:2px;">Because He is a Trinity.</p>
+
+      <p style="font-size:24px;color:var(--ember);font-family:'Cinzel',serif;letter-spacing:2px;">Because He cannot be contained.</p>
+    </div>
+  </div>
+
+  <div class="divider reveal">· · · ◆ · · ·</div>
+
+  <!-- TERMINAL FRAGMENT -->
+  <div class="fragment reveal">
+    <div class="fragment-header">
+      <span>Terminal Notation</span>
+      <span class="date">Curator's Addendum</span>
+    </div>
+
+    <h2>ON THE NATURE OF THIS DOCUMENT</h2>
+
+    <p>What you have read is not revisionism. It is the canonical record, recovered and arranged. Every exhibit is drawn from scripture that has been in your Bible since the canon closed. Every historical claim is documented in the conciliar record. The church fathers who produced the Nicene Creed knew these texts. The Syriac mothers who called the Spirit "she" knew these texts. The medieval scholars who read the Hebrew knew these texts.</p>
+
+    <p>The question is not whether these things are in the Bible. They are. The question is how they came to be passed over in silence.</p>
+
+    <div class="extracted">
+      "Now we see through a glass, darkly; but then face to face.<br>
+      Now I know in part; but then shall I know<br>
+      even as also I am known."
+      <span class="attribution">1 Corinthians 13:12 · KJV</span>
+    </div>
+
+    <p>My namesake wrestled and would not let go. Neither will I. Neither should you.</p>
+  </div>
+
+  <!-- Seal -->
+  <div class="seal reveal">
+    <div class="seal-circle">FINIS</div>
+  </div>
+
+  <!-- Terminal -->
+  <div class="terminal reveal">
+    FRAGMENT SERIES II — DOSSIER COMPLETE<br>
+    ARCHIVAL STATUS: OPEN<br>
+    CLASSIFICATION: CANONICAL SCRIPTURE — NO APOCRYPHA<br>
+    <br>
+    PRIMARY SOURCES: ESV · NRSV · NIV · NASB · KJV<br>
+    HEBREW: MASORETIC TEXT · GREEK: NA28 · LATIN: VULGATE<br>
+    DATA: ABS (2022–2025) · LIGONIER / LIFEWAY (2022–2025) · BARNA / ACU (2024)<br>
+    HISTORICAL: NICAEA (325) · CONSTANTINOPLE (381) · CAPPADOCIAN FATHERS · ACTS OF THOMAS (3RD C.)<br>
+    <br>
+    EVERY VERSE CHECKABLE · EVERY CLAIM SOURCED<br>
+    THE DISCOMFORT IS THE TEXT'S<br>
+    THE WRESTLING IS YOURS<span class="cursor"></span>
+  </div>
+
+  <!-- Signature -->
+  <div class="colophon reveal">
+    <a href="mailto:JEThomasPhD@gmail.com">JEThomasPhD@gmail.com</a><br>
+    Made with <a href="https://the-companion-dossier.com/Latent_Dialogic_Space/" target="_blank" rel="noopener">Latent Dialogic Space</a>
+  </div>
+
+</div>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
