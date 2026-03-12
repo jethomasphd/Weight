@@ -325,8 +325,63 @@
 
   .ledger td:first-child { color: var(--bone); }
   .ledger tr:hover td { background: rgba(201, 162, 39, 0.03); }
-  .ledger td.alert, .ledger th.alert { color: var(--blood-bright); }
+  .ledger td.alert, .ledger th.alert { color: var(--blood-bright); white-space: nowrap; }
   .ledger th[colspan] { font-size: 11px; letter-spacing: 1px; color: var(--bone); padding: 10px 12px; }
+
+  /* Contradiction bars — pure CSS */
+  .contradiction-list {
+    margin: 25px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .contradiction-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .contradiction-pct {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--blood-bright);
+    min-width: 48px;
+    text-align: right;
+    flex-shrink: 0;
+    letter-spacing: 1px;
+  }
+
+  .contradiction-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .contradiction-bar {
+    height: 4px;
+    background: rgba(139, 32, 32, 0.5);
+    border-radius: 1px;
+    margin-bottom: 6px;
+    transition: width 1.2s ease-out;
+    width: 0;
+  }
+
+  .contradiction-list.animated .contradiction-bar {
+    /* width set via inline style */
+  }
+
+  .contradiction-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-faded);
+    line-height: 1.4;
+  }
+
+  @media (max-width: 600px) {
+    .contradiction-pct { font-size: 15px; min-width: 40px; }
+    .contradiction-text { font-size: 10px; }
+  }
 
   /* Chart containers */
   .chart-container {
@@ -1143,11 +1198,11 @@
         <thead><tr><th>Year</th><th>Engagement %</th></tr></thead>
         <tbody>
           <tr><td>2011</td><td>50</td></tr><tr><td>2012</td><td>49</td></tr>
-          <tr><td>2013</td><td>48</td></tr><tr><td>2014</td><td>48</td></tr>
-          <tr><td>2015</td><td>47</td></tr><tr><td>2016</td><td>47</td></tr>
-          <tr><td>2017</td><td>48</td></tr><tr><td>2018</td><td>49</td></tr>
-          <tr><td>2019</td><td>48</td></tr><tr><td>2020</td><td>49</td></tr>
-          <tr><td>2021</td><td>49</td></tr><tr><td>2022</td><td>39</td></tr>
+          <tr><td>2013</td><td>48</td></tr><tr><td>2014</td><td>47</td></tr>
+          <tr><td>2015</td><td>46</td></tr><tr><td>2016</td><td>45</td></tr>
+          <tr><td>2017</td><td>45</td></tr><tr><td>2018</td><td>46</td></tr>
+          <tr><td>2019</td><td>45</td></tr><tr><td>2020</td><td>44</td></tr>
+          <tr><td>2021</td><td>44</td></tr><tr><td>2022</td><td>39</td></tr>
           <tr><td>2023</td><td>39</td></tr><tr><td>2024</td><td>38</td></tr>
         </tbody>
       </table>
@@ -1178,32 +1233,43 @@
       </tbody>
     </table>
 
-    <figure class="chart-container reveal" data-chart-label="The Contradiction — What They Said, Then What They Also Said" role="figure" aria-label="Chart showing contradictions in evangelical survey responses">
-      <canvas id="contradictionChart" aria-hidden="true"></canvas>
-      <table class="sr-only" aria-label="Doctrinal contradiction data">
-        <thead><tr><th>Statement</th><th>Agreement %</th></tr></thead>
-        <tbody>
-          <tr><td>Jesus was not God</td><td>28</td></tr>
-          <tr><td>God accepts all religions</td><td>47</td></tr>
-          <tr><td>Spirit is not a person</td><td>53</td></tr>
-          <tr><td>People are good by nature</td><td>53</td></tr>
-          <tr><td>Science disproves Bible</td><td>19</td></tr>
-        </tbody>
-      </table>
-    </figure>
-
-    <table class="ledger" style="margin-top:0">
-      <thead>
-        <tr><th>Those Same People Also Agreed With:</th><th class="alert">%</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>"Jesus was a great teacher, but he was not God."</td><td class="alert">28%</td></tr>
-        <tr><td>"God accepts the worship of all religions, including Christianity, Judaism, and Islam."</td><td class="alert">47%</td></tr>
-        <tr><td>"The Holy Spirit is a force but is not a personal being."</td><td class="alert">53%</td></tr>
-        <tr><td>"Everyone sins a little, but most people are good by nature."</td><td class="alert">53%</td></tr>
-        <tr><td>"Modern science disproves the Bible."</td><td class="alert">19%</td></tr>
-      </tbody>
-    </table>
+    <div class="contradiction-list reveal" id="contradictionBars" role="figure" aria-label="Percentage of self-identified evangelicals who contradicted their own qualifying beliefs">
+      <div class="contradiction-row">
+        <div class="contradiction-pct">53%</div>
+        <div class="contradiction-content">
+          <div class="contradiction-bar" style="width:53%"></div>
+          <div class="contradiction-text">"The Holy Spirit is a force but is not a personal being."</div>
+        </div>
+      </div>
+      <div class="contradiction-row">
+        <div class="contradiction-pct">53%</div>
+        <div class="contradiction-content">
+          <div class="contradiction-bar" style="width:53%"></div>
+          <div class="contradiction-text">"Everyone sins a little, but most people are good by nature."</div>
+        </div>
+      </div>
+      <div class="contradiction-row">
+        <div class="contradiction-pct">47%</div>
+        <div class="contradiction-content">
+          <div class="contradiction-bar" style="width:47%"></div>
+          <div class="contradiction-text">"God accepts the worship of all religions, including Christianity, Judaism, and Islam."</div>
+        </div>
+      </div>
+      <div class="contradiction-row">
+        <div class="contradiction-pct">28%</div>
+        <div class="contradiction-content">
+          <div class="contradiction-bar" style="width:28%"></div>
+          <div class="contradiction-text">"Jesus was a great teacher, but he was not God."</div>
+        </div>
+      </div>
+      <div class="contradiction-row">
+        <div class="contradiction-pct">19%</div>
+        <div class="contradiction-content">
+          <div class="contradiction-bar" style="width:19%"></div>
+          <div class="contradiction-text">"Modern science disproves the Bible."</div>
+        </div>
+      </div>
+    </div>
 
     <p>Read that again. These are not skeptics. These are people who <em>already said</em> that only Jesus saves — and then, in the same survey, said Jesus was not God, God accepts all religions, and the Spirit is not a person. They inherited the words. <strong>They lost the weight of what the words mean.</strong></p>
 
@@ -1833,7 +1899,7 @@
     function renderHemorrhageChart() {
       const ctx = hemorrhageCanvas.getContext('2d');
       const years = ['2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'];
-      const data = [50, 49, 48, 48, 47, 47, 48, 49, 48, 49, 49, 39, 39, 38];
+      const data = [50, 49, 48, 47, 46, 45, 45, 46, 45, 44, 44, 39, 39, 38];
 
       // Gradient fill
       const gradient = ctx.createLinearGradient(0, 0, 0, 300);
@@ -1906,8 +1972,8 @@
               }
             },
             y: {
-              min: 30,
-              max: 55,
+              min: 35,
+              max: 52,
               grid: { color: 'rgba(58, 54, 50, 0.3)', drawBorder: false },
               ticks: {
                 font: { size: 9, family: "'IBM Plex Mono', monospace" },
@@ -1935,119 +2001,29 @@
       });
     }
 
-    // --- Chart 2: The Contradiction ---
-    let contradictionRendered = false;
-    const contradictionCanvas = document.getElementById('contradictionChart');
+    // --- Contradiction bars animation ---
+    const contradictionEl = document.getElementById('contradictionBars');
+    if (contradictionEl) {
+      // Start bars at width 0
+      const bars = contradictionEl.querySelectorAll('.contradiction-bar');
+      const barWidths = [];
+      bars.forEach(bar => {
+        barWidths.push(bar.style.width);
+        bar.style.width = '0';
+      });
 
-    if (contradictionCanvas) {
-      const contradictionObserver = new IntersectionObserver((entries) => {
+      const cObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting && !contradictionRendered) {
-            contradictionRendered = true;
-            renderContradictionChart();
-            contradictionObserver.unobserve(entry.target);
+          if (entry.isIntersecting) {
+            contradictionEl.classList.add('animated');
+            bars.forEach((bar, i) => {
+              setTimeout(() => { bar.style.width = barWidths[i]; }, i * 150);
+            });
+            cObserver.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.3 });
-      contradictionObserver.observe(contradictionCanvas);
-    }
-
-    function renderContradictionChart() {
-      const ctx = contradictionCanvas.getContext('2d');
-
-      const labels = [
-        'Jesus was not God',
-        'God accepts all religions',
-        'Spirit is not a person',
-        'People are good by nature',
-        'Science disproves Bible'
-      ];
-
-      const qualifyingData = [100, 100, 100, 100, 100];
-      const contradictionData = [28, 47, 53, 53, 19];
-
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Qualified as "Evangelical" (affirmed orthodoxy)',
-              data: qualifyingData,
-              backgroundColor: 'rgba(201, 162, 39, 0.3)',
-              borderColor: '#8a6f1a',
-              borderWidth: 1,
-              barPercentage: 0.7,
-              categoryPercentage: 0.8
-            },
-            {
-              label: 'Then also affirmed this contradiction',
-              data: contradictionData,
-              backgroundColor: 'rgba(139, 32, 32, 0.6)',
-              borderColor: '#8b2020',
-              borderWidth: 1,
-              barPercentage: 0.7,
-              categoryPercentage: 0.8
-            }
-          ]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: true,
-          aspectRatio: 1.6,
-          animation: {
-            duration: prefersReducedMotion ? 0 : 1500,
-            easing: 'easeOutQuart'
-          },
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                font: { size: 9, family: "'IBM Plex Mono', monospace" },
-                color: '#7a7264',
-                padding: 14,
-                boxWidth: 12,
-                boxHeight: 10
-              }
-            },
-            tooltip: {
-              backgroundColor: '#0d0b08',
-              borderColor: '#3a3632',
-              borderWidth: 1,
-              titleColor: '#d4cbb8',
-              bodyColor: '#9c9484',
-              titleFont: { family: "'IBM Plex Mono', monospace", size: 11 },
-              bodyFont: { family: "'IBM Plex Mono', monospace", size: 10 },
-              callbacks: {
-                label: function(context) {
-                  return context.dataset.label + ': ' + context.parsed.x + '%';
-                }
-              }
-            }
-          },
-          scales: {
-            x: {
-              max: 110,
-              grid: { color: 'rgba(58, 54, 50, 0.3)', drawBorder: false },
-              ticks: {
-                font: { size: 9, family: "'IBM Plex Mono', monospace" },
-                color: '#4a4538',
-                callback: function(value) { return value + '%'; }
-              }
-            },
-            y: {
-              grid: { display: false },
-              ticks: {
-                font: { size: 9, family: "'IBM Plex Mono', monospace" },
-                color: '#9c9484',
-                crossAlign: 'far',
-                padding: 8
-              }
-            }
-          }
-        }
-      });
+      }, { threshold: 0.2 });
+      cObserver.observe(contradictionEl);
     }
   }
 
